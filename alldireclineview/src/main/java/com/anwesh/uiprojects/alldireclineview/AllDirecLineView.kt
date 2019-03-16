@@ -21,6 +21,7 @@ val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#4CAF50")
 val backColor : Int = Color.parseColor("#BDBDBD")
 val rFactor : Int = 9
+val delay : Long = 20
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -32,7 +33,7 @@ fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b)
 fun Canvas.drawADLNode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
-    val gap : Float = w / (nodes + 1)
+    val gap : Float = h / (nodes + 1)
     val size : Float = gap / sizeFactor
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
@@ -45,10 +46,13 @@ fun Canvas.drawADLNode(i : Int, scale : Float, paint : Paint) {
     rotate(90f * sc2)
     for (j in 0..(lines - 1)) {
         val sc : Float = sc1.divideScale(j, lines)
+        val y : Float = size * sc
         save()
+        rotate(90f * j)
         translate(size, 0f)
         drawCircle(0f, 0f, r, paint)
-        drawLine(0f, 0f, 0f, size * sc, paint)
+        drawLine(0f, 0f, 0f, y, paint)
+        drawCircle(0f, y, r, paint)
         restore()
     }
     restore()
@@ -98,7 +102,7 @@ class AllDirecLineView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(delay)
                     view.invalidate()
                 } catch(ex : Exception) {
 
