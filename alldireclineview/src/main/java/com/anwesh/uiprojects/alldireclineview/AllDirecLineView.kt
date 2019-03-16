@@ -186,4 +186,26 @@ class AllDirecLineView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : AllDirecLineView) {
+
+        private val animator : Animator = Animator(view)
+        private var adl : AllDirecLine = AllDirecLine(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            adl.draw(canvas, paint)
+            animator.animate {
+                adl.update {i, scl ->
+                    animator.start()
+                }
+            }
+        }
+
+        fun handleTap() {
+            adl.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
