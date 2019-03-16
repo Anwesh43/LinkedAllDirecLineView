@@ -209,4 +209,13 @@ class AllDirecLineView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : AllDirecLineView {
+            val view : AllDirecLineView = AllDirecLineView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
